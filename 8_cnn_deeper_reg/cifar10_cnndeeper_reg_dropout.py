@@ -98,7 +98,10 @@ if __name__ == "__main__" :
     #----------------------------------
     # 5.1 세션, 변수 초기화
     #----------------------------------
+        saver = tf.train.Saver(max_to_keep=5)
         sess.run(tf.global_variables_initializer())
+        #saver.restore(sess, "saved/train2-9")
+     
         writer = tf.summary.FileWriter("./board/sample",sess.graph)
 
         # == 정확도를 계산하는 연산.
@@ -136,7 +139,8 @@ if __name__ == "__main__" :
                 loss_print = loss.eval(feed_dict={x: batch_x, y: batch_y, trainphase : False , keepprob:1})
                 train_accuracy_list.append(train_accuracy)
                 loss_list.append(loss_print)
-
+                
+            saver.save(sess, "saved/train2", e)
             print("반복(Epoch):", e, "트레이닝 데이터 정확도:", np.mean(train_accuracy_list), "손실 함수(loss):",np.mean(loss_list))
 
         # ..........................
